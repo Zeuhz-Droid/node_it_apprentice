@@ -2,13 +2,14 @@ const Task = require("../models/taskModel");
 
 exports.getTasks = async (req, res, next) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find(req.query);
 
     if (!tasks.length) {
       res.status(404).json({
         status: "fail",
         message: "No tasks found",
       });
+      return;
     }
 
     res.status(200).json({
@@ -17,22 +18,22 @@ exports.getTasks = async (req, res, next) => {
         tasks,
       },
     });
-    next();
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
 exports.getTask = async (req, res, next) => {
   try {
-    const id = req.params.id;
-    const task = await Task.findById({ id });
+    const taskId = req.params.id;
+    const task = await Task.findById(taskId);
 
     if (!task) {
       res.status(404).json({
         status: "fail",
         message: "No task found with that ID",
       });
+      return;
     }
 
     res.status(200).json({
@@ -41,16 +42,26 @@ exports.getTask = async (req, res, next) => {
         task,
       },
     });
-    next();
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
 exports.createTask = async (req, res, next) => {
   try {
     const newTask = req.body;
-    await Task.create({ newTask });
+
+    if (!newTask) {
+      res.status(404).json({
+        status: "fail",
+        message: "Include a task to create.",
+      });
+      return;
+    }
+
+    console.log(newTask);
+
+    await Task.create(newTask);
 
     res.status(200).json({
       status: "success",
@@ -59,20 +70,25 @@ exports.createTask = async (req, res, next) => {
       },
     });
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
 exports.updateTask = async (req, res, next) => {
   try {
-    const task = req.params.id;
-    await Task.findByIdAndUpdate({ task });
+    const taskId = req.params.id;
+
+    const task = await Task.findByIdAndUpdate(taskId, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!task) {
       res.status(404).json({
         status: "fail",
         messagage: "No task found with that ID",
       });
+      return;
     }
 
     res.status(200).json({
@@ -81,16 +97,15 @@ exports.updateTask = async (req, res, next) => {
         task,
       },
     });
-    next();
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
 
 exports.deleteTask = async (req, res, next) => {
   try {
-    const id = req.params.id;
-    const task = await Task.findByIdAndDelete({ id });
+    const taskId = req.params.id;
+    const task = await Task.findByIdAndDelete(taskId);
 
     if (!task) {
       return res.status(404).json({
@@ -103,8 +118,7 @@ exports.deleteTask = async (req, res, next) => {
       status: "success",
       data: null,
     });
-    next();
   } catch (error) {
-    throw new Error(error);
+    next(error);
   }
 };
