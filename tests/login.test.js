@@ -27,11 +27,11 @@ describe("Login Middleware", () => {
   });
 
   it("should call next with error if password is incorrect", async () => {
-    req.body = { email: "test@example.com", password: "wrongpassword" };
+    req.body = { email: "chronic@example.com", password: "wrongpassword" };
     const password = await bcrypt.hash("correctpassword", 12);
     User.findOne.mockImplementation(() => ({
       select: jest.fn().mockResolvedValue({
-        email: "test@example.com",
+        email: "chronic@example.com",
         password,
         correctPassword: jest.fn().mockResolvedValue(false),
       }),
@@ -43,12 +43,12 @@ describe("Login Middleware", () => {
   });
 
   it("should login user and return 200 if credentials are correct", async () => {
-    req.body = { email: "test@example.com", password: "correctpassword" };
+    req.body = { email: "chronic@example.com", password: "correctpassword" };
     const password = await bcrypt.hash("correctpassword", 12);
 
     User.findOne.mockImplementation(() => ({
       select: jest.fn().mockResolvedValue({
-        email: "test@example.com",
+        email: "chronic@example.com",
         password,
         correctPassword: jest.fn().mockResolvedValue(true),
       }),
@@ -61,7 +61,7 @@ describe("Login Middleware", () => {
       status: "successfully logged in",
       data: {
         user: {
-          email: "test@example.com",
+          email: "chronic@example.com",
           password: undefined,
         },
       },
