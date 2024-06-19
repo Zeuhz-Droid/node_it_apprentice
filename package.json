@@ -1,25 +1,39 @@
 {
   "name": "node_it_apprentice",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "your tasks manager",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "cross-env NODE_ENV=production pm2 start app.js --name node_it_apprentice",
+    "stop": "pm2 stop node_it_apprentice && pm2 delete node_it_apprentice",
+    "restart": "pm2 restart node_it_apprentice",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "jest"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "tasks"
+  ],
+  "author": "zeuhz",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-mongo-sanitize": "^2.2.0",
     "helmet": "^7.1.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.3",
+    "pm2": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
     "morgan": "^1.10.0",
+    "node-mocks-http": "^1.14.1",
     "nodemon": "^3.1.3"
   }
 }
