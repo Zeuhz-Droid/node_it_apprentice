@@ -1,22 +1,18 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const mongoose = require("mongoose");
 
-const client = new MongoClient(process.env.DATABSE_URL, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+const clientOptions = {
+  serverApi: { version: "1", strict: true, deprecationErrors: true },
+};
 
 async function connectToDB() {
   try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
+    await mongoose.connect(process.env.DATABASE_URL, clientOptions);
+    await mongoose.connection.db.admin().command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
-  } finally {
-    await client.close();
+  } catch (error) {
+    console.log("Connection to DB failed");
   }
 }
-run().catch(console.dir);
+connectToDB();
