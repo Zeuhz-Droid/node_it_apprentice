@@ -14,9 +14,7 @@ exports.getTasks = async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: {
-        tasks,
-      },
+      tasks,
     });
   } catch (error) {
     next(error);
@@ -38,9 +36,7 @@ exports.getTask = async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: {
-        task,
-      },
+      task,
     });
   } catch (error) {
     next(error);
@@ -59,15 +55,11 @@ exports.createTask = async (req, res, next) => {
       return;
     }
 
-    console.log(newTask);
-
-    await Task.create(newTask);
+    const task = await Task.create(newTask);
 
     res.status(200).json({
       status: "success",
-      data: {
-        newTask,
-      },
+      task,
     });
   } catch (error) {
     next(error);
@@ -93,9 +85,7 @@ exports.updateTask = async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: {
-        task,
-      },
+      task,
     });
   } catch (error) {
     next(error);
