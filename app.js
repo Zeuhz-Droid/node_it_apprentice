@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const cors = require("cors");
 const mongoSanitize = require("express-mongo-sanitize");
 
 const taskRouter = require("./routes/taskRoutes");
@@ -10,6 +11,10 @@ const userRouter = require("./routes/userRoutes");
 require("./db");
 
 const app = express();
+
+app.use(cors());
+
+app.options("*", cors());
 
 app.use(helmet());
 
